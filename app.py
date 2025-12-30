@@ -404,7 +404,6 @@
 #     subscriber_process.join()
 
 from flask import Flask, render_template, jsonify, request
-import mysql.connector
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -631,22 +630,16 @@ def generate_pie_chart(pie_chart_data):
 
 @app.route('/map_data')
 def get_map_data():
-    connection = mysql.connector.connect(
-        host=MYSQL_HOST,
-        port=MYSQL_PORT,
-        database=MYSQL_DB,
-        user=MYSQL_USER,
-        password=MYSQL_PASSWORD
-    )
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     query = "SELECT latitude, longitude, robot_id, id AS data_id, temperature, quality_1, quality_2, quality_3 FROM gps_data"
-    cursor = connection.cursor()
     cursor.execute(query)
+    
+    # fetchall returns Row objects, so we iterate and convert
+    map_data = [dict(row) for row in cursor.fetchall()]
 
-    columns = [column[0] for column in cursor.description]
-    map_data = [dict(zip(columns, row)) for row in cursor.fetchall()]
-
-    connection.close()
+    conn.close()
 
     return jsonify(map_data)
 
