@@ -489,8 +489,8 @@ def delete_data():
     except Exception as e:
         return jsonify({'message': 'Failed to delete data', 'error': str(e)}), 500
 
-@app.route('/')
-@app.route('/<robot_ids>')
+@app.route('/table')
+@app.route('/table/<robot_ids>')
 def display_data_route(robot_ids=None):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -653,6 +653,7 @@ def get_pie_chart_data():
     _, pie_data, _ = get_data_from_db()
     return jsonify(pie_data)
 
+@app.route('/')
 @app.route('/space_dashboard')
 def space_dashboard():
     return render_template('space_dashboard.html')
