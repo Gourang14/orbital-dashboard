@@ -1,0 +1,212 @@
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('../static/bgi.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;  /* This will ensure the background image stays fixed when scrolling */
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: rgb(9, 255, 0);
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #e0e0e0;
+}
+
+.sort-button {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}
+
+.delete-button:focus {
+  outline: none;
+}
+
+.delete-button:active {
+  transform: translateY(1px);
+}
+
+.buttons {
+  align-items: center;
+}
+
+.button-container {
+  text-align: center;
+}
+
+.button-box {
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sort-button.clicked {
+  background-color: rgb(68, 0, 255);
+}
+
+.save-button {
+  background-color: #45a049;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.save-button:hover {
+  background-color: #00797f;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+}
+
+#filter-form {
+  display: flex;
+  align-items: center;
+}
+
+#robot-id-input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+#robot-id-input::placeholder {
+  color: #999;
+}
+
+#filter-form button[type="submit"],
+#reset-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#reset-button {
+  background-color: #dc3545;
+  margin-left: 10px;
+}
+
+.empty-data-message {
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  margin: 20px 0;
+}
+
+.arrow-up {
+  display: none;
+}
+
+.arrow-down {
+  display: none;
+}
+
+.sort-button:focus .arrow-up {
+  display: inline;
+}
+
+.sort-button:focus .arrow-down {
+  display: none;
+}
+
+.sort-button.active .arrow-up {
+  display: none;
+}
+
+.sort-button.active .arrow-down {
+  display: inline;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column-header-text {
+  margin-right: 5px;
+  text-decoration: underline;
+}
+
+.upside-down-arrow-button {
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-button {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-image: url("../arrowicons/arrow.png");
+  background-size: contain;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.icon-button:hover {
+  background-color: #f0f0f0;
+}

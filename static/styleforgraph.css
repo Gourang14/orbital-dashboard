@@ -1,0 +1,61 @@
+/* styleforgraph.css */
+
+/* Container for the main content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styling */
+.container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #333;
+}
+
+/* Grid layout for plots */
+.imggrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/* Individual plot styling */
+.plot {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Plot title styling */
+.plot h2 {
+    text-align: center;
+    font-size: 1.5em;
+    color: #555;
+}
+
+/* Image styling for plots */
+.plot img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .imggrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1024px) {
+    .imggrid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

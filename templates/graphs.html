@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Graphs</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleforgraph.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        .plot {
+            width: 45%;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            display: inline-block;
+        }
+        .plot img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Live Graphs</h1>
+        <div class="imggrid">
+            <div class="plot">
+                <h2>Temperature</h2>
+                <img src="{{ url_for('static', filename='temperature.png') }}" alt="Temperature Plot">
+            </div>
+            <!-- <div class="plot">
+                <h2>Latitude</h2>
+                <img src="{{ url_for('static', filename='latitude.png') }}" alt="Latitude Plot">
+            </div>
+            <div class="plot">
+                <h2>Longitude</h2>
+                <img src="{{ url_for('static', filename='longitude.png') }}" alt="Longitude Plot">
+            </div> -->
+            <div class="plot">
+                <h2>Quality Distribution</h2>
+                <img src="{{ url_for('static', filename='quality_distribution.png') }}" alt="Quality Distribution Pie Chart">
+            </div>
+            <div class="plot">
+                <h2>Average Temperature per Robot</h2>
+                <img src="{{ url_for('static', filename='average_temperature_per_robot.png') }}" alt="Average Temperature per Robot Bar Chart">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

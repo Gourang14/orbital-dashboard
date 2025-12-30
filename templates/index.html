@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPS Data</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>GPS Data</h1>
+
+    <!-- buttons to sort values -->
+    <div class="button-container">
+        <div class="button-box">
+            <button class="save-button" onclick="sortDataBySerialNumber()">Reset Sorting</button>
+            <button class="save-button" onclick="saveDataAsCSV()">Save as CSV</button>
+            <button class="save-button" onclick="window.location.href='/indexgr'">Open Live Graph</button>
+        </div>
+    </div>
+
+    <!-- filter things -->
+    <div class="filter-container">
+        <form id="filter-form" action="/">
+            <input type="text" id="robot-id-input" placeholder="Enter Robot IDs">
+            <button type="submit">Filter</button>
+            <button type="button" id="reset-button">Reset</button>
+        </form>
+    </div>
+
+    <br>
+
+    <table id="data-table">
+        <thead>
+            <th>
+                <div class="column-header">
+                    <span class="column-header-text">Sr No.</span>
+                    <button class="upside-down-arrow-button" onclick="sortDataBySerialNumber()">
+                        &#x1F53C;
+                    </button>
+                </div>
+            </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Date</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByDate()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Robot ID</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByDate()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Data ID</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByDataID()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Topic</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByTopic()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Temperature</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByTemperature()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Latitude</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByLatitude()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Longitude</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByLongitude()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Quality1</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByq1()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Quality2</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByq2()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Quality3</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByq3()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+                <th>
+                    <div class="column-header">
+                        <span class="column-header-text">Time</span>
+                        <button class="upside-down-arrow-button" onclick="sortDataByTime()">
+                            &#x1F53C;
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in data %}
+                <tr>
+                    <td>{{ document.id }}</td>
+                    <td>{{ document.date }}</td>
+                    <td>{{ document.robot_id }}</td>
+                    <td>{{ document.data_id }}</td>
+                    <td>{{ document.topic }}</td>
+                    <td>{{ document.temperature }}</td>
+                    <td>{{ document.latitude }}</td>
+                    <td>{{ document.longitude }}</td>
+                    <td>{{ document.quality_1 }}</td>
+                    <td>{{ document.quality_2 }}</td>
+                    <td>{{ document.quality_3 }}</td>
+                    <td>{{ document.time }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <div class="button-container">
+        <div class="button-box">
+            <button class="delete-button" onclick="deleteData()">Delete All Data</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

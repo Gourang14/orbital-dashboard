@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Live Map and Statistics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #11224e;
+            color: #8ae4ff;
+        }
+
+        .container-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        #bargraph-container {
+            width: 50%;
+            margin: 10px;
+            border-radius: 10px;
+            background-color: #1a3267;
+            padding: 20px;
+        }
+
+        #piechart-container {
+            width: 50%;
+            margin: 10px;
+            border-radius: 10px;
+            background-color: #1a3267;
+            padding: 20px;
+        }
+
+        .statistics-container {
+            width: 100%;
+            margin: 15px 0;
+            background-color: rgb(22, 40, 88);
+            color: rgb(138, 228, 255);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .statistics-container h2 {
+            margin-top: 0;
+            font-size: 48px;
+            text-align: center;
+        }
+
+        .statistics-container h3 {
+            margin-top: 20px;
+            font-size: 28px;
+        }
+
+        .statistics-container p {
+            margin: 5px 0;
+            padding-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .statistics-container p:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        hr {
+            display: block;
+            margin-left: 15px;
+            margin-right: 15px;
+            border-style: inset;
+            border-width: 3px;
+            color: rgb(35, 204, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-main">
+        <div class="chart-container">
+            <div id="bargraph-container">
+                {{ bar_graph | safe }}
+            </div>
+            <div id="piechart-container">
+                {{ pie_chart | safe }}
+            </div>
+        </div>
+        <div class="statistics-container">
+            <h2>Statistics</h2>
+            <hr>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="tem">
+                            <h3>Temperature</h3>
+                            <p class="mean">Mean: <span id="temperature_mean">{{ temperature_mean }}</span></p>
+                            <p class="median">Median: <span id="temperature_median">{{ temperature_median }}</span></p>
+                            <p class="mode">Mode: <span id="temperature_mode">{{ temperature_mode }}</span></p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="lat">
+                            <h3>Quality 1</h3>
+                            <p class="mean">Mean: <span id="quality_1_mean">{{ quality_1_mean }}</span></p>
+                            <p class="median">Median: <span id="quality_1_median">{{ quality_1_median }}</span></p>
+                            <p class="mode">Mode: <span id="quality_1_mode">{{ quality_1_mode }}</span></p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="lon">
+                            <h3>Quality 2</h3>
+                            <p class="mean">Mean: <span id="quality_2_mean">{{ quality_2_mean }}</span></p>
+                            <p class="median">Median: <span id="quality_2_median">{{ quality_2_median }}</span></p>
+                            <p class="mode">Mode: <span id="quality_2_mode">{{ quality_2_mode }}</span></p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="lon">
+                            <h3>Quality 3</h3>
+                            <p class="mean">Mean: <span id="quality_3_mean">{{ quality_3_mean }}</span></p>
+                            <p class="median">Median: <span id="quality_3_median">{{ quality_3_median }}</span></p>
+                            <p class="mode">Mode: <span id="quality_3_mode">{{ quality_3_mode }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script>
+        var map = L.map('map').setView([25.3, 83], 11.5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        function fetchDataAndUpdateMap() {
+            fetch('/map_data')
+                .then(response => response.json())
+                .then(data => {
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker) {
+                            map.removeLayer(layer);
+                        }
+                    });
+
+                    data.slice(0, 50).forEach(function (location) {
+                        var marker = L.marker([location.latitude, location.longitude]).addTo(map);
+                        var popupContent = `<strong>Latitude:</strong> ${location.latitude}<br>
+                                            <strong>Longitude:</strong> ${location.longitude}<br>
+                                            <strong>Robot ID:</strong> ${location.robot_id}<br>
+                                            <strong>Data ID:</strong> ${location.data_id}<br>
+                                            <strong>Temperature:</strong> ${location.temperature}<br>
+                                            <strong>Quality 1:</strong> ${location.quality_1}<br>
+                                            <strong>Quality 2:</strong> ${location.quality_2}<br>
+                                            <strong>Quality 3:</strong> ${location.quality_3}`;
+                        marker.bindPopup(popupContent);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        fetchDataAndUpdateMap();
+        setInterval(fetchDataAndUpdateMap, 5000);
+
+        function fetchAndDrawBarGraph() {
+            fetch('/bar_chart_data')
+                .then(response => response.json())
+                .then(plot_data => {
+                    document.getElementById('bargraph-container').innerHTML = plot_data;
+                })
+                .catch(error => {
+                    console.error('Error fetching bar graph data:', error);
+                });
+        }
+
+        fetchAndDrawBarGraph();
+
+        function fetchAndDrawPieChart() {
+            fetch('/pie_chart_data')
+                .then(response => response.json())
+                .then(data => {
+                    var pieData = [{
+                        labels: data.map(d => d.robot_id),
+                        values: data.map(d => d.count),
+                        type: 'pie'
+                    }];
+
+                    var pieLayout = {
+                        margin: { t: 0, l: 0, r: 0, b: 0 },
+                        width: 400, // Adjust the width if necessary
+                        height: 400 // Adjust the height if necessary
+                    };
+
+                    Plotly.newPlot('piechart-container', pieData, pieLayout);
+                })
+                .catch(error => {
+                    console.error('Error fetching or plotting pie chart:', error);
+                });
+        }
+
+        fetchAndDrawPieChart();
+    </script>
+</body>
+
+</html>
