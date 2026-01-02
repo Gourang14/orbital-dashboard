@@ -119,17 +119,68 @@ function initPIV() {
     let activeFilter = 'original';
     let isStreaming = false;
 
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-            video.onloadedmetadata = () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                isStreaming = true;
-                requestAnimationFrame(processFrame);
-            };
-        })
-        .catch(err => console.error("Camera error:", err));
+    let currentStream = null;
+
+    function startCamera(facingMode = 'user') {
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+        }
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+            .then(stream => {
+                currentStream = stream;
+                video.srcObject = stream;
+                video.play();
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    isStreaming = true;
+                    requestAnimationFrame(processFrame);
+                };
+            })
+            .catch(err => console.error("Camera error:", err));
+    }
+
+    // Initial Camera Load
+    startCamera();
+
+    // Camera Switcher
+    const camSelect = document.getElementById('camera-select');
+    if (camSelect) {
+        camSelect.addEventListener('change', (e) => {
+            // If user explicitly selects camera, we switch back to webcams
+            startCamera(e.target.value);
+        });
+    }
+
+    // Video Upload Logic
+    const videoUpload = document.getElementById('video-upload');
+    if (videoUpload) {
+        videoUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Stop any webcam stream
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                    currentStream = null;
+                }
+
+                // Clear srcObject (webcam) and set src (file)
+                video.srcObject = null;
+                video.src = URL.createObjectURL(file);
+                video.loop = true;
+                video.play();
+
+                video.onloadeddata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    isStreaming = true;
+                    requestAnimationFrame(processFrame);
+                    console.log("Video uploaded and playing");
+                };
+            }
+        });
+    }
 
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {

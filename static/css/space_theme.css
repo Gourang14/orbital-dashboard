@@ -175,6 +175,20 @@ body {
     box-shadow: 0 0 15px var(--neon-blue);
 }
 
+.upload-control {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.small-btn {
+    padding: 5px 15px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 /* Grids */
 .grid-layout {
     display: grid;
